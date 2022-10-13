@@ -1,0 +1,189 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Mobile Control for PPT</title>
+    <meta name="description" content="A Moblie friendly page for controlling PPT">
+    <meta name="author" content="Shuxin Qiao">
+
+    <style>
+        html, body {width: auto!important; overflow-x: hidden!important;} 
+        .background {
+            position: relative;
+            
+        }
+
+        .connect {
+            position: relative;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .status {
+            display: inline-block;
+            width: 100%;
+        }
+
+        .input {
+            width: 60%;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .vertical-center {
+            position: relative;
+            width: 100%;
+        }
+
+        .button-connect {
+            position: relative;
+            background-color: #04AA6D;
+            border: none;
+            font-size: 14px;
+            color: #FFFFFF;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            padding-left: 20px;
+            padding-right: 20px;
+            margin-left: 20px;
+            text-align: center;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+            text-decoration: none;
+            overflow: hidden;
+            cursor: pointer;
+            border-radius: 15px;
+        }
+        .button-connect:after {
+            content: "";
+            background: #90EE90;
+            display: block;
+            position: absolute;
+            padding-top: 300%;
+            padding-left: 350%;
+            margin-left: -20px!important;
+            margin-top: -120%;
+            opacity: 0;
+            transition: all 0.8s
+        }
+        .button-connect:active:after {
+            padding: 0;
+            margin: 0;
+            opacity: 1;
+            transition: 0s
+        }
+
+        .button {
+            position: relative;
+            background-color: #04a8c5;
+            border: none;
+            font-size: 28px;
+            color: #FFFFFF;
+            padding-top: 60px;
+            padding-right: 20px;
+            padding-bottom: 60px;
+            padding-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            text-align: center;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+            text-decoration: none;
+            overflow: hidden;
+            cursor: pointer;
+            border-radius: 15px;
+        }
+        .button:after {
+            content: "";
+            background: #90EE90;
+            display: block;
+            position: absolute;
+            padding-top: 300%;
+            padding-left: 350%;
+            margin-left: -20px!important;
+            margin-top: -120%;
+            opacity: 0;
+            transition: all 0.8s
+        }
+        .button:active:after {
+            padding: 0;
+            margin: 0;
+            opacity: 1;
+            transition: 0s
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background">
+
+        <div class="connect">
+            <div class="status">
+                <h1>Server Status:</h1>
+                <h1 id="server_status">Disconnected</h1>
+            </div>
+            
+            <input onfocus="this.value=''" value="XXX.XXX.XXX.XXX:XXXX" class="input" id="ip_address">
+            <button class="button-connect" onclick="Connect()">Connect</button>
+        </div>
+
+        <div class="vertical-center">
+            <button class="button" onclick="PreviousPage()">Previous</button>
+            <button class="button" onclick="NextPage()">Next</button>
+        </div>
+            
+    </div>
+
+    <script>
+        var run = function (ip_address) {
+            var status = document.getElementById("server_status");
+            
+            window.ws = new WebSocket("ws://" + ip_address);
+
+            // listening
+            ws.onmessage = function (eve) {
+                console.log(eve.data);
+            }
+
+            // Socket status
+            ws.onopen = function () {
+                status.innerHTML = "Connected";
+                ws.send("Connected");
+            }
+
+            // Socket close
+            ws.onclose = function () {
+                status.innerHTML = "Disconnected";
+            }
+
+        }
+
+        function Connect() {
+            let ip_address = document.getElementById("ip_address").value;
+
+            if (useRegex(ip_address)) {
+                run(ip_address);
+            } else {
+                alert("Wrong IP format, please check.");
+            }
+        }
+
+        function useRegex(input) {
+            let regex = /\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\b:[0-9]+/i;
+            return regex.test(input);
+        }
+
+        function PreviousPage() {
+            ws.send("Previous");
+        }
+
+        function NextPage() {
+            ws.send("Next");
+        }
+    </script>
+</body>
+</html>

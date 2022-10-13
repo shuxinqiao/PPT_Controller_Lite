@@ -1,0 +1,77 @@
+﻿<Window x:Class="PPT_Controller_Lite.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PPT_Controller_Lite"
+        mc:Ignorable="d"
+        Title="PPT Controller Lite" Height="300" Width="510" MinHeight="300" MinWidth="510" MaxHeight="300" MaxWidth="510"
+        
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        ui:WindowHelper.UseModernWindowStyle="True">
+
+    <StackPanel>
+        <DockPanel>
+            <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" DockPanel.Dock="Bottom">
+                <Menu DockPanel.Dock="Top">
+                    <MenuItem Header="_File">
+                        <MenuItem Header="_Open" Click="File_Open_Click"/>
+                        <Separator />
+                        <MenuItem Header="_Exit" Click="File_Exit_Click"/>
+                    </MenuItem>
+                    <MenuItem Header="_Help" Click="Help_Click">
+                    </MenuItem>
+                    <MenuItem Header="_About">
+                        <MenuItem Header="_Author" />
+                    </MenuItem>
+                </Menu>
+            </Border>
+        </DockPanel>
+
+        <ui:SimpleStackPanel Margin="10,0,10,10" Spacing="24">
+
+            <WrapPanel Margin="0" Height="50">
+                <TextBlock Text="Server Status: " FontSize="30" Style="{StaticResource HeaderTextBlockStyle}"/>
+                <TextBlock Name="server_status" FontSize="30" Style="{StaticResource HeaderTextBlockStyle}" Text="{Binding Server_Status}" />
+            </WrapPanel>
+
+            <WrapPanel Margin="0">
+                <TextBox AcceptsReturn="False" TextChanged="TextBox_TextChanged" 
+                         FontSize="19" Name="IP_input"
+                         MinHeight="34" MaxHeight="30" MinWidth="300" MaxWidth="300" MaxLines="1"
+                         VerticalContentAlignment="Center">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib" >
+                            <Style.Resources>
+                                <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                                    <VisualBrush.Visual>
+                                        <Label Content="  Server IP" Foreground="LightGray"/>
+                                    </VisualBrush.Visual>
+                                </VisualBrush>
+                            </Style.Resources>
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                    <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                                </Trigger>
+                                <Trigger Property="Text" Value="{x:Null}">
+                                    <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter Property="Background" Value="White" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+
+                <Button Content="Connect" Style="{StaticResource AccentButtonStyle}" Margin="10,0,0,0" Click="Connect_Button_Click"/>
+                <Button Content="Disconnect" Margin="10,0,0,0" Click="Disconnect_Button_Click"/>
+            </WrapPanel>
+
+            <ui:SimpleStackPanel Margin="10,0,10,10" Spacing="24" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button FontFamily="Marlett" FontSize="50" Content="3" Margin="0,0,20,0" Click="Window_Left_Button" Style="{StaticResource AccentButtonStyle}"/>
+                <Button FontFamily="Marlett" FontSize="50" Content="4" Margin="20,0,0,0" Click="Window_Right_Button" Style="{StaticResource AccentButtonStyle}"/>
+            </ui:SimpleStackPanel>
+        </ui:SimpleStackPanel>
+    </StackPanel>
+</Window>
